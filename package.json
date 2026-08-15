@@ -1,0 +1,14 @@
+{
+  "name": "git-commit-craft-cli",
+  "version": "1.0.0",
+  "description": "Interactive CLI tool for generating conventional git commit messages and changelogs",
+  "main": "index.js",
+  "bin": {
+    "commit-craft": "bin/cli.js"
+  },
+  "scripts": {
+    "test": "node --test tests/craft.test.js"
+  },
+  "author": "Syahir Mahmud",
+  "license": "MIT"
+}
