@@ -12,7 +12,17 @@ const COMMIT_TYPES = {
   chore: "Build tools or repository maintenance"
 };
 
-function formatCommitMessage({ type, scope, description, isBreaking = false }) {
+const COMMIT_EMOJIS = {
+  feat: "✨",
+  fix: "🐛",
+  docs: "📚",
+  style: "🎨",
+  refactor: "♻️",
+  test: "🧪",
+  chore: "⚙️"
+};
+
+function formatCommitMessage({ type, scope, description, isBreaking = false, withEmoji = false }) {
   if (!COMMIT_TYPES[type]) {
     throw new Error(`Invalid commit type: ${type}. Must be one of: ${Object.keys(COMMIT_TYPES).join(', ')}`);
   }
@@ -20,10 +30,11 @@ function formatCommitMessage({ type, scope, description, isBreaking = false }) {
     throw new Error("Commit description cannot be empty");
   }
 
+  const emojiStr = withEmoji && COMMIT_EMOJIS[type] ? `${COMMIT_EMOJIS[type]} ` : '';
   const scopeStr = scope && scope.trim() ? `(${scope.trim()})` : '';
   const breakingStr = isBreaking ? '!' : '';
   
-  return `${type}${scopeStr}${breakingStr}: ${description.trim()}`;
+  return `${emojiStr}${type}${scopeStr}${breakingStr}: ${description.trim()}`;
 }
 
 function generateGitHookScript() {
@@ -39,7 +50,7 @@ fi
 }
 
 function parseCommitMessage(commitStr) {
-  const regex = /^([a-z]+)(?:\(([^)]+)\))?(!+)?: (.+)$/;
+  const regex = /^(?:[^\w\s]+\s+)?([a-z]+)(?:\(([^)]+)\))?(!+)?: (.+)$/;
   const match = commitStr.match(regex);
   if (!match) return null;
 
@@ -51,4 +62,4 @@ function parseCommitMessage(commitStr) {
   };
 }
 
-module.exports = { COMMIT_TYPES, formatCommitMessage, parseCommitMessage, generateGitHookScript };
+module.exports = { COMMIT_TYPES, COMMIT_EMOJIS, formatCommitMessage, parseCommitMessage, generateGitHookScript };

@@ -14,6 +14,11 @@ describe('Git Commit Craft CLI Unit Tests', () => {
     assert.strictEqual(script.includes('Conventional Commit validation hook'), true);
   });
 
+  test('formatCommitMessage prepends emoji when withEmoji option is enabled', () => {
+    const msg = formatCommitMessage({ type: 'feat', description: 'add login', withEmoji: true });
+    assert.strictEqual(msg, '✨ feat: add login');
+  });
+
   test('formatCommitMessage supports breaking change flag', () => {
     const msg = formatCommitMessage({ type: 'fix', description: 'drop support for v1 API', isBreaking: true });
     assert.strictEqual(msg, 'fix!: drop support for v1 API');
