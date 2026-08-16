@@ -1,11 +1,17 @@
 const assert = require('assert');
 const { test, describe } = require('node:test');
-const { formatCommitMessage, parseCommitMessage } = require('../index.js');
+const { formatCommitMessage, parseCommitMessage, generateGitHookScript } = require('../index.js');
 
 describe('Git Commit Craft CLI Unit Tests', () => {
   test('formatCommitMessage generates valid conventional commit', () => {
     const msg = formatCommitMessage({ type: 'feat', scope: 'auth', description: 'add JWT middleware' });
     assert.strictEqual(msg, 'feat(auth): add JWT middleware');
+  });
+
+  test('generateGitHookScript outputs valid shell script', () => {
+    const script = generateGitHookScript();
+    assert.strictEqual(script.includes('#!/bin/sh'), true);
+    assert.strictEqual(script.includes('Conventional Commit validation hook'), true);
   });
 
   test('formatCommitMessage prepends emoji when withEmoji option is enabled', () => {
